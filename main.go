@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
@@ -24,7 +25,6 @@ type apiConfig struct {
 //go:embed static/*
 var staticFiles embed.FS
 
-// test comment
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -92,6 +92,11 @@ func main() {
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: router,
+		// Set timeouts to mitigate Slowloris and other potential attacks
+		ReadTimeout:       5 * time.Second,   // Max time to read the request body
+		WriteTimeout:      10 * time.Second,  // Max time to write a response
+		IdleTimeout:       120 * time.Second, // Max time for idle connections
+		ReadHeaderTimeout: 5 * time.Second,   // Max time to read headers
 	}
 
 	log.Printf("Serving on port: %s\n", port)
