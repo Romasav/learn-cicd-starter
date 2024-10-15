@@ -30,7 +30,6 @@ jobs:
               uses: 'google-github-actions/setup-gcloud@v2'
               with:
                 project_id: 'learn-ci-cd-438516'
-                install_components: 'docker'
 
             - name: Deploy
               run: gcloud builds submit --tag europe-west2-docker.pkg.dev/learn-ci-cd-438516/learn-ci-cd-ar-repo/learn-ci-cd:latest .
